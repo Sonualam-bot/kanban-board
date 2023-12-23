@@ -4,6 +4,12 @@ export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(null);
+  const [randomColor, setRandomColor] = useState(generateRandomColor());
+
+  function generateRandomColor() {
+    const randomInt = () => Math.floor(Math.random() * 256);
+    return `rgb(${randomInt()}, ${randomInt()}, ${randomInt()})`;
+  }
 
   useEffect(() => {
     if (window.matchMedia(`(prefers-color-scheme)`).matches) {
@@ -16,17 +22,25 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
+      document.documentElement.style.setProperty(
+        "--background-color",
+        randomColor
+      );
     } else {
       document.documentElement.classList.remove("dark");
+      document.documentElement.style.setProperty("--background-color", "");
     }
-  }, [theme]);
+  }, [theme, randomColor]);
 
   const handleThemeSwitch = () => {
+    const newRandomColor = generateRandomColor();
+    setRandomColor(newRandomColor);
     setTheme(theme === "dark" ? "light" : "dark");
   };
 
   const value = {
     theme,
+    randomColor,
     handleThemeSwitch,
   };
 
