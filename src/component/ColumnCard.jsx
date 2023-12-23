@@ -9,9 +9,23 @@ function ColumnCard({ title, icon }) {
   const { data } = useContext(KanbanContext);
   const { randomColor } = useContext(ThemeContext);
 
+  const { selectedDropdownOrdering } = useContext(KanbanContext);
+
   const filterTicketsForStatusCount = data?.tickets?.filter(
     (ticket) => ticket.status === title
   );
+
+  const sortFunction = (a, b) => {
+    const order = selectedDropdownOrdering.ordering;
+    if (order === "priority") {
+      return b.priority - a.priority;
+    } else if (order === "title") {
+      return a.title.localeCompare(b.title);
+    }
+    return 0;
+  };
+
+  const sortedTickets = filterTicketsForStatusCount?.sort(sortFunction);
 
   return (
     <div className="flex flex-col gap-[0.2rem]">
@@ -45,7 +59,7 @@ function ColumnCard({ title, icon }) {
       </div>
 
       {/* <div> */}
-      {filterTicketsForStatusCount?.map((user) => {
+      {sortedTickets?.map((user) => {
         return (
           <UserTicketDetailCard
             key={user.id}

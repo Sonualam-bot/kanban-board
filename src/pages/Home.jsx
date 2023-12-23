@@ -7,7 +7,7 @@ import done from "../assets/done.svg";
 
 function Home() {
   return (
-    <div className=" grid grid-cols-5 gap-[15px] w-[97%] m-auto h-[92vh] px-0 py-3  sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5  ">
+    <div className=" grid grid-cols-5 gap-[15px] w-[97%] m-auto  px-0 py-3  sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5  ">
       <ColumnCard title="Backlog" icon={backlog} />
 
       {/* 22222222222222222 */}
