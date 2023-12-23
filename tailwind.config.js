@@ -4,13 +4,14 @@ export default {
   darkMode: "class",
   theme: {
     extend: {},
+    screens: {
+      sm: "0px",
+      md: "500px",
+      lg: "1000px",
+      xl: "1200px",
+      "2xl": "1536px",
+    },
   },
-  screens: {
-    sm: { min: "0px", max: "500px" },
-    md: { min: "680px", max: "1000px" },
-    lg: { min: "1000px", max: "1200px" },
-    xl: { min: "1200px" },
-    "2xl": { min: "1536px" },
-  },
+
   plugins: [],
 };
