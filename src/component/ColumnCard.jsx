@@ -1,8 +1,18 @@
 import { GoPlus } from "react-icons/go";
 import { BsThreeDots } from "react-icons/bs";
-import loadingIcon from "../assets/loading.svg";
+import { useContext } from "react";
+import { KanbanContext } from "../context/KanbanContext";
+import UserTicketDetailCard from "./UserTicketDetailCard";
+import { ThemeContext } from "../context/ThemeContext";
 
-function ColumnCard() {
+function ColumnCard({ title, icon }) {
+  const { data } = useContext(KanbanContext);
+  const { randomColor } = useContext(ThemeContext);
+
+  const filterTicketsForStatusCount = data?.tickets?.filter(
+    (ticket) => ticket.status === title
+  );
+
   return (
     <div className="flex flex-col gap-[0.2rem]">
       {/* //main contaner  */}
@@ -11,16 +21,19 @@ function ColumnCard() {
         <div className="flex gap-[7px] justify-between items-center ">
           <div className="text-[1rem] flex items-center ">
             <div>
-              <img src={loadingIcon} className="text-gray-500" alt="/loading" />
+              <img src={icon} className="text-gray-500" alt="/loading" />
             </div>
           </div>
           <span className="text-[1rem] font-semibold text-[#373737] dark:text-[#ebebeb] ">
-            Backlog
+            {title}
           </span>
-          <span className="text-[#808080] ">2</span>
+          <span className="text-[#808080] ">
+            {" "}
+            {filterTicketsForStatusCount?.length}{" "}
+          </span>
         </div>
         {/* right */}
-        <div className="flex gap-[6px] justify-between items-center ">
+        <div className="flex gap-[6px] justify-between items-center dark:text-white ">
           <div className="text-[1rem] ">
             {" "}
             <GoPlus />
@@ -31,7 +44,17 @@ function ColumnCard() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2"></div>
+      {/* <div> */}
+      {filterTicketsForStatusCount?.map((user) => {
+        return (
+          <UserTicketDetailCard
+            key={user.id}
+            user={user}
+            randomColor={randomColor}
+          />
+        );
+      })}
+      {/* </div> */}
     </div>
   );
 }
