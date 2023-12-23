@@ -5,6 +5,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { CiLight } from "react-icons/ci";
 import { MdDarkMode } from "react-icons/md";
 import { ThemeContext } from "../context/ThemeContext";
+import Dropdown from "./Dropdown";
 
 function Navbar() {
   const [light, setLight] = useState(false);
@@ -42,6 +43,11 @@ function Navbar() {
             </div>
           </div>
         </div>
+        {showDisplayModal && (
+          <div className="absolute">
+            <Dropdown />
+          </div>
+        )}
         {/* starts here first div  */}
         {/* 2 */}
         <div className="bg-transparent border-none outline-none cursor-pointer text-lg light:text-[#373737] dark:text-white ">
