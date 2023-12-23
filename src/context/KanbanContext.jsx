@@ -5,6 +5,7 @@ export const KanbanContext = createContext();
 export const KanbanContextProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [selectedDropdownOrdering, setSelectedDropdownOrdering] = useState([]);
+  const [selectedGroupingDropDown, setSelectedGroupingDropDown] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -42,6 +43,8 @@ export const KanbanContextProvider = ({ children }) => {
     extractStatus,
     selectedDropdownOrdering,
     setSelectedDropdownOrdering,
+    selectedGroupingDropDown,
+    setSelectedGroupingDropDown,
   };
 
   return (

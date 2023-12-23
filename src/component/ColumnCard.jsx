@@ -9,7 +9,10 @@ function ColumnCard({ title, icon }) {
   const { data } = useContext(KanbanContext);
   const { randomColor } = useContext(ThemeContext);
 
-  const { selectedDropdownOrdering } = useContext(KanbanContext);
+  const { selectedDropdownOrdering, selectedGroupingDropDown } =
+    useContext(KanbanContext);
+
+  console.log(selectedGroupingDropDown);
 
   const filterTicketsForStatusCount = data?.tickets?.filter(
     (ticket) => ticket.status === title
