@@ -8,7 +8,7 @@ function App() {
       <div>
         <Navbar />
       </div>
-      <div className="bg-[#F4F5F8]  dark:bg-[#010409]">
+      <div className="bg-[#F4F5F8] min-h-[774.7px]  dark:bg-[#010409]">
         <Home />
       </div>
     </div>

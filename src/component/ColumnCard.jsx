@@ -5,21 +5,26 @@ import { KanbanContext } from "../context/KanbanContext";
 import UserTicketDetailCard from "./UserTicketDetailCard";
 import { ThemeContext } from "../context/ThemeContext";
 
-function ColumnCard({ title, icon }) {
+function ColumnCard({ status, icon, userKiId }) {
   const { data } = useContext(KanbanContext);
   const { randomColor } = useContext(ThemeContext);
 
   const { selectedDropdownOrdering, selectedGroupingDropDown } =
     useContext(KanbanContext);
 
-  console.log(selectedGroupingDropDown);
-
   const filterTicketsForStatusCount = data?.tickets?.filter(
-    (ticket) => ticket.status === title
+    (ticket) => ticket.status === status
   );
 
-  const sortFunction = (a, b) => {
-    const order = selectedDropdownOrdering.ordering;
+  const filterUserById = data?.tickets?.filter(
+    (ticket) => ticket.userId === userKiId
+  );
+
+  const sortOrderValue = selectedDropdownOrdering.ordering;
+  const sortGroupValue = selectedGroupingDropDown.grouping;
+
+  const sortFunctionOrder = (a, b) => {
+    const order = sortOrderValue;
     if (order === "priority") {
       return b.priority - a.priority;
     } else if (order === "title") {
@@ -27,8 +32,20 @@ function ColumnCard({ title, icon }) {
     }
     return 0;
   };
+  const sortFunctionGroup = (a, b) => {
+    const order = sortGroupValue;
+    if (order === "priority") {
+      return a.priority - b.priority;
+    } else if (order === "title") {
+      return a.title.localeCompare(b.title);
+    }
+    return 0;
+  };
 
-  const sortedTickets = filterTicketsForStatusCount?.sort(sortFunction);
+  const sortedTicketsStatus =
+    filterTicketsForStatusCount?.sort(sortFunctionOrder);
+
+  const sortedTicketsGroup = filterUserById?.sort(sortFunctionGroup);
 
   return (
     <div className="flex flex-col gap-[0.2rem]">
@@ -36,17 +53,44 @@ function ColumnCard({ title, icon }) {
       <div className="flex justify-between items-center h-[8vh] py-0 px-[0.4rem] ">
         {/* //left  */}
         <div className="flex gap-[7px] justify-between items-center ">
-          <div className="text-[1rem] flex items-center ">
-            <div>
-              <img src={icon} className="text-gray-500" alt="/loading" />
+          {/* // status starts here  */}
+          {selectedGroupingDropDown.grouping === "status" && (
+            <div className="text-[1rem] flex items-center ">
+              <div>
+                <img src={icon} className="text-gray-500" alt="/loading" />
+              </div>
             </div>
-          </div>
+          )}
+          {/* // status ends here  */}
+
+          {/* // users starts here  */}
+          {selectedGroupingDropDown.grouping === "user" && (
+            <div
+              className="inline-flex justify-center items-center w-[15px] h-[15px] rounded-full text-[0.5rem] font-normal text-white relative "
+              style={{ backgroundColor: randomColor }}
+            >
+              <div>
+                {status?.[0]
+                  ?.split(" ")
+                  .map((word) => word.charAt(0))
+                  .join("")
+                  .toUpperCase()}
+              </div>
+
+              <div className="bg-[#808080] absolute bottom-0 right-0 w-[5px] h-[5px] rounded-full outline-1 outline-white "></div>
+            </div>
+          )}
+          {/* // user ends here  */}
+
           <span className="text-[1rem] font-semibold text-[#373737] dark:text-[#ebebeb] ">
-            {title}
+            {status}
           </span>
           <span className="text-[#808080] ">
             {" "}
-            {filterTicketsForStatusCount?.length}{" "}
+            {selectedGroupingDropDown.grouping === "status" &&
+              filterTicketsForStatusCount?.length}{" "}
+            {selectedGroupingDropDown.grouping === "user" &&
+              filterUserById?.length}{" "}
           </span>
         </div>
         {/* right */}
@@ -62,15 +106,28 @@ function ColumnCard({ title, icon }) {
       </div>
 
       {/* <div> */}
-      {sortedTickets?.map((user) => {
-        return (
-          <UserTicketDetailCard
-            key={user.id}
-            user={user}
-            randomColor={randomColor}
-          />
-        );
-      })}
+      {selectedGroupingDropDown.grouping === "status" &&
+        sortedTicketsStatus?.map((user) => {
+          return (
+            <UserTicketDetailCard
+              key={user.id}
+              user={user}
+              randomColor={randomColor}
+            />
+          );
+        })}
+      {/* </div> */}
+      {/* <div> */}
+      {selectedGroupingDropDown.grouping === "user" &&
+        sortedTicketsGroup?.map((user) => {
+          return (
+            <UserTicketDetailCard
+              key={user.id}
+              user={user}
+              randomColor={randomColor}
+            />
+          );
+        })}
       {/* </div> */}
     </div>
   );

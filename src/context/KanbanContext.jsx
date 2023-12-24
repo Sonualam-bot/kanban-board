@@ -5,7 +5,9 @@ export const KanbanContext = createContext();
 export const KanbanContextProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [selectedDropdownOrdering, setSelectedDropdownOrdering] = useState([]);
-  const [selectedGroupingDropDown, setSelectedGroupingDropDown] = useState([]);
+  const [selectedGroupingDropDown, setSelectedGroupingDropDown] = useState({
+    grouping: "status",
+  });
 
   const fetchData = async () => {
     try {
@@ -33,6 +35,13 @@ export const KanbanContextProvider = ({ children }) => {
     },
     ["Done", "Cancelled"]
   );
+  const extractUniqueUserNames = data?.users?.reduce((acc, curr) => {
+    if (acc.includes(curr.name)) {
+      return acc;
+    } else {
+      return [...acc, curr.name];
+    }
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -45,6 +54,7 @@ export const KanbanContextProvider = ({ children }) => {
     setSelectedDropdownOrdering,
     selectedGroupingDropDown,
     setSelectedGroupingDropDown,
+    extractUniqueUserNames,
   };
 
   return (
